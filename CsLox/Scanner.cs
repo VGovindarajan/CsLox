@@ -1,11 +1,8 @@
-﻿using System.Globalization;
-using System.Reflection.Metadata;
-
-namespace CsLox;
+﻿namespace CsLox;
 
 public class Scanner
 {
-    public string Source { get; init; }
+    private char[] source { get; init; }
     private int currentIndex = 0;
     private int startIndex = 0;
     private int lineNumber = 1;
@@ -32,9 +29,9 @@ public class Scanner
         ["while"] = TokenType.WHILE,
     };
 
-    public Scanner(string source)
+    public Scanner(char[] source)
     {
-        Source = source;
+        this.source = source;
     }
 
     public IEnumerable<Token> Scan()
@@ -180,7 +177,7 @@ public class Scanner
             }
         }
 
-        AddToken(TokenType.NUMBER, Source.Substring(startIndex, currentIndex - startIndex));
+        AddToken(TokenType.NUMBER, source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToString());
     }
 
     public void HandleIdentifier()
@@ -189,7 +186,7 @@ public class Scanner
         {
             Advance();
         }
-        string text = Source.Substring(startIndex, currentIndex - startIndex);
+        string text = source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToString();
         if (keyWords.ContainsKey(text))
         {
             AddToken(keyWords[text]);
@@ -200,11 +197,11 @@ public class Scanner
 
     private char PeekNext()
     {
-        if ((currentIndex + 1) >= Source.Length)
+        if ((currentIndex + 1) >= source.Length)
         {
             return '\0';
         }
-        return Source[currentIndex + 1];
+        return source[currentIndex + 1];
     }
 
     private void HandleString()
@@ -228,7 +225,7 @@ public class Scanner
         Advance();
 
         //Trim the surrounding quotes.
-        string value = Source.Substring(startIndex + 1, currentIndex - startIndex - 2);
+        string value = source.AsSpan().Slice(startIndex + 1, currentIndex - startIndex - 2).ToString();
         AddToken(TokenType.STRING, value);
     }
 
@@ -238,7 +235,7 @@ public class Scanner
         {
             return '\0';
         }
-        return Source[currentIndex];
+        return source[currentIndex];
     }
 
     private bool Match(char expected)
@@ -247,7 +244,7 @@ public class Scanner
         {
             return false;
         }
-        if (Source[currentIndex] != expected)
+        if (source[currentIndex] != expected)
         {
             return false;
         }
@@ -257,12 +254,12 @@ public class Scanner
 
     private bool IsAtEnd()
     {
-        return currentIndex >= Source.Length;
+        return currentIndex >= source.Length;
     }
 
     private char Advance()
     {
-        return Source[currentIndex++];
+        return source[currentIndex++];
     }
 
     private void AddToken(TokenType tokenType)
@@ -272,7 +269,7 @@ public class Scanner
 
     private void AddToken(TokenType tokenType, object? literal)
     {
-        var text = Source.Substring(startIndex, currentIndex - startIndex);
+        var text = source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToString();
         tokens.Add(new Token(tokenType, text, literal, lineNumber));
     }
 }

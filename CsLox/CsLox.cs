@@ -52,7 +52,7 @@ public class CsLox
 
     void RunScan(string line)
     {
-        Scanner scanner = new Scanner(line);
+        Scanner scanner = new Scanner(line.ToCharArray());
         IEnumerable<Token> tokens = scanner.Scan();
         foreach (var token in tokens)
         {
