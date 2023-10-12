@@ -49,4 +49,5 @@ public enum TokenType
     VAR = 37,
     WHILE = 38,
     EOF = 39,
+    COLON = 40,
 }

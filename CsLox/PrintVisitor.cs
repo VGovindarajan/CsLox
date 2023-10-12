@@ -13,13 +13,17 @@ namespace CsLox
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("(");
+            
             sb.Append(name);
             if (expressions != null)
             {
                 foreach (Expr e in expressions)
                 {
                     sb.Append(" ");
-                    sb.Append(e.Accept(this));
+                    if (e != null)
+                    {
+                        sb.Append(e.Accept(this));
+                    }
                     sb.Append(" ");
                 }
             }
@@ -40,7 +44,7 @@ namespace CsLox
 
         public string VisitGroupingExpr(GroupingExpr groupingExpr)
         {
-            return Parenthesize(string.Empty, groupingExpr);
+            return Parenthesize("group", groupingExpr.Expression );
         }
 
         public string VisitLiteralExpr(LiteralExpr literalExpr)
@@ -53,7 +57,7 @@ namespace CsLox
 
         public string VisitUnaryExpr(UnaryExpr unaryExpr)
         {
-            return Parenthesize(unaryExpr?.Unary?.Token?.Lexeme ?? string.Empty, unaryExpr?.Right ?? null);
+            return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty, unaryExpr?.Right);
         }
     }
 }

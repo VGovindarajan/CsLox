@@ -81,6 +81,9 @@ public class Scanner
             case '*':
                 AddToken(TokenType.STAR);
                 break;
+            case ':':
+                AddToken(TokenType.COLON);
+                break;
 
             //Single or double character operators
             case '!':

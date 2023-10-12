@@ -10,21 +10,21 @@
         }
     }
     public record UnaryExpr() : Expr{
-        public OperatorRepr? Unary { get; init; }
-        public Expr? Right { get; init; }
+        public Token Token { get; init; }
+        public Expr Right { get; init; }
         private HashSet<string> _allowedSet = new HashSet<string>() { "!","-" };
-        public UnaryExpr(string Unary, Expr Right) :this
+        public UnaryExpr(Token Token, Expr Right) :this
             (
             )
         {
-            if (_allowedSet.Contains(Unary))
+            if (_allowedSet.Contains(Token.Lexeme ?? string.Empty))
             {
-                this.Unary = new OperatorRepr(Unary);
                 this.Right = Right;
+                this.Token = Token;
             }
             else
             {
-                throw new InvalidOperationException($"{Unary} is not supported.");
+                throw new InvalidOperationException($"{Token} is not supported.");
             }
         }
 
@@ -34,6 +34,7 @@
         }
     };
     public record GroupingExpr(Expr Expression) : Expr {
+
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.VisitGroupingExpr(this);
@@ -59,30 +60,15 @@
             "-",
             "*",
             "/",
-            "!"
+            "!",
+            ":",
         };
-        public Token? Token { get; init; }
-        public OperatorRepr(string Operator) : this()
+        public Token Operator { get; init; }
+        public OperatorRepr(Token Operator) : this()
         {
-            if (_allowedSet.Contains(Operator))
+            if (Operator!= null && _allowedSet.Contains(Operator.Lexeme??string.Empty))
             {
-                switch (Operator)
-                {
-                    case "==": Token = new Token(TokenType.EQUAL_EQUAL, "==", "==", 0); break;
-                    case "!=": Token = new Token(TokenType.BANG_EQUAL, "!=", "!=", 0); break;
-                    case "<": Token = new Token(TokenType.LESS, "<", "<", 0); break;
-                    case "<=": Token = new Token(TokenType.LESS_EQUAL, "<=", "<=", 0); break;
-                    case ">": Token = new Token(TokenType.GREATER, ">", ">", 0); break;
-                    case ">=": Token = new Token(TokenType.GREATER_EQUAL, ">=", ">=", 0); break;
-                    case "+": Token = new Token(TokenType.PLUS, "+", "+", 0); break;
-                    case "=": Token = new Token(TokenType.MINUS, "-", "-", 0); break;
-                    case "*": Token = new Token(TokenType.STAR, "*", "*", 0); break;
-                    case "/": Token = new Token(TokenType.SLASH, "/", "/", 0); break;
-                    case "!": Token = new Token(TokenType.BANG, "!", "!", 0); break;
-
-                    default:
-                        break;
-                }
+                this.Operator = Operator;
             }
             throw new InvalidOperationException($"{Operator} is not supported.");
         }
