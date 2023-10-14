@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +14,18 @@ namespace CsLox
         private int currentIndex = 0;
         public Parser(List<Token> tokens) {
             this.tokens = tokens;
+        }
+
+        public Expr Parse()
+        {
+            try
+            {
+                return Expression();
+
+            }catch (ParseException pe) {
+                Console.WriteLine($"{pe.Message}");
+                throw;
+            }
         }
 
         private Expr Expression()
@@ -44,7 +58,85 @@ namespace CsLox
             return expr;
 
         }
+        private Expr Term()
+        {
+            Expr expr = Factor();
+            while (Match(TokenType.PLUS, TokenType.MINUS))
+            {
+                Token op = Previous();
+                Expr right = Factor();
+                expr = new BinaryExpr(expr, op, right);
+            }
+            return expr;
+        }
 
+        private Expr Factor()
+        {
+            Expr expr = Unary();
+            while (Match(TokenType.STAR, TokenType.SLASH))
+            {
+                Token op = Previous();
+                Expr right = Unary();
+                expr = new BinaryExpr(expr, op, right);
+            }
+            return expr;
+        }
+
+        private Expr Unary()
+        {
+            if (Match(TokenType.BANG, TokenType.MINUS))
+            {
+                Token op = Previous();
+                Expr right = Unary();
+                return new UnaryExpr(op, right);
+            }
+            return Primary();
+        }
+
+        private Expr Primary()
+        {
+            if(Match(TokenType.FALSE))
+            {
+                return new LiteralExpr(TokenType.FALSE, "false");
+            }
+            if (Match(TokenType.TRUE))
+            {
+                return new LiteralExpr(TokenType.TRUE, "true");
+            }
+            if (Match(TokenType.NIL))
+            {
+                return new LiteralExpr(TokenType.NIL, "nil");
+            }
+
+            if(Match(TokenType.NUMBER, TokenType.STRING))
+            {
+                var p = Previous();
+                return new LiteralExpr(p.TokenType, p.Lexeme??string.Empty);
+            }
+
+            if (Match(TokenType.LEFT_PAREN))
+            {
+                var expr = Expression();
+                Consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
+                return new GroupingExpr(expr);
+            }
+
+            throw Error(Peek(), "Expect Expression");
+        }
+
+        private Token Consume(TokenType tokenType, string message) {
+            if (Check(tokenType))
+            {
+                return Advance();
+            }
+            throw Error(Peek(), message);
+        }
+
+        private ParseException Error(Token token, string message)
+        {
+            ErrorHandler.Error(token, message);
+            return new ParseException($"Line:{token.Line}, Lexeme:{token.Lexeme ?? string.Empty}, message:{message}");
+        }
         private bool Match(params TokenType[] tokenTypes)
         {
             foreach(var tokenType in tokenTypes)
@@ -57,6 +149,8 @@ namespace CsLox
             }
             return false;
         }
+
+
 
         private bool Check(TokenType type) {
             if (IsAtEnd())
