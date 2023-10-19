@@ -181,5 +181,30 @@ namespace CsLox
         {
             return tokens[currentIndex - 1];
         }
+
+        private void Synchronize()
+        {
+            Advance();
+
+            while (!IsAtEnd())
+            {
+                if (Previous().TokenType == TokenType.SEMICOLON) {
+                    return;
+                }
+
+                switch (Peek().TokenType) {
+                    case TokenType.CLASS:
+                    case TokenType.FUN:
+                    case TokenType.VAR:
+                    case TokenType.FOR:
+                    case TokenType.IF:
+                    case TokenType.WHILE:
+                    case TokenType.PRINT:
+                    case TokenType.RETURN:
+                        return;
+                }
+                Advance();
+            }
+        }
     }
 }

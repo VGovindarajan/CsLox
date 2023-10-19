@@ -1,4 +1,6 @@
-﻿namespace CsLox;
+﻿using System.Linq.Expressions;
+
+namespace CsLox;
 
 public class CsLox
 {
@@ -54,10 +56,17 @@ public class CsLox
     {
         Scanner scanner = new Scanner(line.ToCharArray());
         IEnumerable<Token> tokens = scanner.Scan();
-        foreach (var token in tokens)
+        //foreach (var token in tokens)
+        //{
+        //    Console.WriteLine(token);
+        //}
+        Parser parser = new Parser(tokens.ToList());
+        Expr expr = parser.Parse();
+        if (expr != null)
         {
-            Console.WriteLine(token);
+            Console.WriteLine(new PrintVisitor().Print(expr));
         }
+
         return;
     }
 }
