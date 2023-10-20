@@ -2,7 +2,7 @@
 
 namespace CsLox
 {
-    public class PrintVisitor : IVisitor<string>
+    public class AstPrinter : IVisitor<string>
     {
         public string Print(Expr expr)
         {
@@ -57,7 +57,12 @@ namespace CsLox
 
         public string VisitUnaryExpr(UnaryExpr unaryExpr)
         {
-            return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty, unaryExpr?.Right);
+            var right = unaryExpr != null ? unaryExpr.Right : null;
+            if(right!= null)
+            {
+                return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty, right);
+            }
+            return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty);
         }
     }
 }

@@ -10,12 +10,10 @@
         }
     }
     public record UnaryExpr() : Expr{
-        public Token Token { get; init; }
-        public Expr Right { get; init; }
+        public Token? Token { get; init; }
+        public Expr? Right { get; init; }
         private HashSet<string> _allowedSet = new HashSet<string>() { "!","-" };
-        public UnaryExpr(Token Token, Expr Right) :this
-            (
-            )
+        public UnaryExpr(Token Token, Expr Right) :this()
         {
             if (_allowedSet.Contains(Token.Lexeme ?? string.Empty))
             {
@@ -25,6 +23,13 @@
             else
             {
                 throw new InvalidOperationException($"{Token} is not supported.");
+            }
+            if(Token == null) {
+                throw new InvalidOperationException($"Token is null");
+            }
+            if (Right == null)
+            {
+                throw new InvalidOperationException($"Right is null");
             }
         }
 
@@ -63,7 +68,7 @@
             "!",
             ":",
         };
-        public Token Operator { get; init; }
+        public Token? Operator { get; init; }
         public OperatorRepr(Token Operator) : this()
         {
             if (Operator!= null && _allowedSet.Contains(Operator.Lexeme??string.Empty))

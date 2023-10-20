@@ -64,7 +64,7 @@ public class CsLox
         Expr expr = parser.Parse();
         if (expr != null)
         {
-            Console.WriteLine(new PrintVisitor().Print(expr));
+            Console.WriteLine(new AstPrinter().Print(expr));
         }
 
         return;
