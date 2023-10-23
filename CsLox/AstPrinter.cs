@@ -52,7 +52,7 @@ namespace CsLox
             if (literalExpr.TokenType == TokenType.NIL) {
                 return "nil";
             }
-            return literalExpr.Literal;
+            return $"{literalExpr.Value}";
         }
 
         public string VisitUnaryExpr(UnaryExpr unaryExpr)

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CsLox
 {
-    public class ParseException : Exception
+    public class CsLoxParseException : Exception
     {
-        public ParseException(string? message) : base(message)
+        public CsLoxParseException(string? message) : base(message)
         {
         }
     }

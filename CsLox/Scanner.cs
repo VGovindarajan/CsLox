@@ -139,7 +139,7 @@ public class Scanner
                 }
                 else
                 {
-                    ErrorHandler.Report(lineNumber, c.ToString(), $"Unexpected character {c}");
+                    CsLoxErrorHandler.ReportParseError(lineNumber, c.ToString(), $"Unexpected character {c}");
                 }
                 break;
         }
@@ -220,7 +220,7 @@ public class Scanner
 
         if (IsAtEnd())
         {
-            ErrorHandler.Error(lineNumber, "Unterminated string");
+            CsLoxErrorHandler.ParseError(lineNumber, "Unterminated string");
             return;
         }
 

@@ -22,7 +22,7 @@ namespace CsLox
             {
                 return Expression();
 
-            }catch (ParseException pe) {
+            }catch (CsLoxParseException pe) {
                 Console.WriteLine($"{pe.Message}");
                 throw;
             }
@@ -132,10 +132,10 @@ namespace CsLox
             throw Error(Peek(), message);
         }
 
-        private ParseException Error(Token token, string message)
+        private CsLoxParseException Error(Token token, string message)
         {
-            ErrorHandler.Error(token, message);
-            return new ParseException($"Line:{token.Line}, Lexeme:{token.Lexeme ?? string.Empty}, message:{message}");
+            CsLoxErrorHandler.ParseError(token, message);
+            return new CsLoxParseException($"Line:{token.Line}, Lexeme:{token.Lexeme ?? string.Empty}, message:{message}");
         }
         private bool Match(params TokenType[] tokenTypes)
         {

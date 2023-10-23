@@ -4,6 +4,7 @@ namespace CsLox;
 
 public class CsLox
 {
+    private static Interpreter interpreter = new Interpreter();
     public CsLox() { }
 
     public void Run(string[] args)
@@ -46,7 +47,7 @@ public class CsLox
                 break;
             }
             RunScan(line);
-            ErrorHandler.HadError = false;
+            CsLoxErrorHandler.HadParseError = false;
             Console.Write(">");
         }
         return;
@@ -62,10 +63,11 @@ public class CsLox
         //}
         Parser parser = new Parser(tokens.ToList());
         Expr expr = parser.Parse();
-        if (expr != null)
-        {
-            Console.WriteLine(new AstPrinter().Print(expr));
-        }
+        //if (expr != null)
+        //{
+        //    Console.WriteLine(new AstPrinter().Print(expr));
+        //}
+        interpreter.Interpret(expr);
 
         return;
     }
