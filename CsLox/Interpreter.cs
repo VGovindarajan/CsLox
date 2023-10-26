@@ -42,11 +42,25 @@ namespace CsLox
                     if (leftIsParsed && rightIsParsed)
                     {
                         return l + r;    
-                    }else if(left is string @ls && right is string @rs)
+                    }
+                    else if (left is char[] @lca && right is char[] @rca)
+                    {
+                        var length = lca.Length + rca.Length;
+                        var ret = new char[length];
+                        Array.Copy(lca, ret, lca.Length);
+                        Array.Copy(rca, 0, ret, lca.Length, rca.Length);
+                        return ret;
+                    }
+                    else if(left is string @ls && right is string @rs)
                     {
                         return @ls + @rs;
-                    }else if(left is string || right is string) {
-                        return left.ToString() + right.ToString();
+
+                    }else if(left is char[] @lcaa) {
+                        return new string(lcaa) + right.ToString();
+                    }
+                    else if (right is char[] @rcaa)
+                    {
+                        return left.ToString() + new string(rcaa);
                     }
                     else
                     {
@@ -139,6 +153,9 @@ namespace CsLox
                     text = text.Substring(0, text.Length - 2);
                 }
                 return text??string.Empty;
+            }else if (obj is char[] @ca)
+            {
+                return new string(ca);
             }
             return obj.ToString() ?? string.Empty;
         }

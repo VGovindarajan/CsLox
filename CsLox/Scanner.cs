@@ -228,8 +228,8 @@ public class Scanner
         Advance();
 
         //Trim the surrounding quotes.
-        string value = source.AsSpan().Slice(startIndex + 1, currentIndex - startIndex - 2).ToString();
-        AddToken(TokenType.STRING, value);
+        var value = source.AsSpan().Slice(startIndex + 1, currentIndex - startIndex - 2);
+        AddToken(TokenType.STRING, value.ToArray());
     }
 
     private char Peek()

@@ -108,10 +108,15 @@ namespace CsLox
                 return new LiteralExpr(TokenType.NIL, "nil");
             }
 
-            if(Match(TokenType.NUMBER, TokenType.STRING))
+            if(Match(TokenType.NUMBER))
             {
                 var p = Previous();
                 return new LiteralExpr(p.TokenType, p.Lexeme??string.Empty);
+            }
+            if (Match(TokenType.STRING))
+            {
+                var p = Previous();
+                return new LiteralExpr(p.TokenType, p.Literal??string.Empty);
             }
 
             if (Match(TokenType.LEFT_PAREN))
