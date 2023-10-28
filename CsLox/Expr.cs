@@ -45,7 +45,7 @@
             return visitor.VisitGroupingExpr(this);
         }
     };
-    public record LiteralExpr(TokenType TokenType, object Value) : Expr{
+    public record LiteralExpr(TokenType TokenType, char[]? Value) : Expr{
         public override T Accept<T>(IVisitor<T> visitor)
         {
             return visitor.VisitLiteralExpr(this);

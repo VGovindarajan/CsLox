@@ -50,4 +50,16 @@ public enum TokenType
     WHILE = 38,
     EOF = 39,
     COLON = 40,
+    CHAR_ARRAY = 41
+  
+}
+
+public enum ValueType
+{
+    NIL = 1,
+    STRING = 2,
+    NUMBER = 3,
+    BOOL = 4,
+    CHAR_ARRAY = 5,
+    
 }

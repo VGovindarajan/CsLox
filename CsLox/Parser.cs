@@ -97,26 +97,32 @@ namespace CsLox
         {
             if(Match(TokenType.FALSE))
             {
-                return new LiteralExpr(TokenType.FALSE, "false");
+                return new LiteralExpr(TokenType.FALSE, "false".ToCharArray());
             }
             if (Match(TokenType.TRUE))
             {
-                return new LiteralExpr(TokenType.TRUE, "true");
+                return new LiteralExpr(TokenType.TRUE, "true".ToCharArray());
             }
             if (Match(TokenType.NIL))
             {
-                return new LiteralExpr(TokenType.NIL, "nil");
+                return new LiteralExpr(TokenType.NIL, "nil".ToCharArray());
             }
 
             if(Match(TokenType.NUMBER))
             {
                 var p = Previous();
-                return new LiteralExpr(p.TokenType, p.Lexeme??string.Empty);
+                return new LiteralExpr(p.TokenType, p.Literal);
             }
+            if (Match(TokenType.CHAR_ARRAY))
+            {
+                var p = Previous();
+                return new LiteralExpr(p.TokenType, p.Literal);
+            }
+
             if (Match(TokenType.STRING))
             {
                 var p = Previous();
-                return new LiteralExpr(p.TokenType, p.Literal??string.Empty);
+                return new LiteralExpr(p.TokenType, p.Literal);
             }
 
             if (Match(TokenType.LEFT_PAREN))

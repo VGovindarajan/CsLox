@@ -180,7 +180,7 @@ public class Scanner
             }
         }
 
-        AddToken(TokenType.NUMBER, source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToString());
+        AddToken(TokenType.NUMBER, source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToArray());
     }
 
     public void HandleIdentifier()
@@ -229,7 +229,7 @@ public class Scanner
 
         //Trim the surrounding quotes.
         var value = source.AsSpan().Slice(startIndex + 1, currentIndex - startIndex - 2);
-        AddToken(TokenType.STRING, value.ToArray());
+        AddToken(TokenType.CHAR_ARRAY, value.ToArray());
     }
 
     private char Peek()
@@ -270,7 +270,7 @@ public class Scanner
         AddToken(tokenType, null);
     }
 
-    private void AddToken(TokenType tokenType, object? literal)
+    private void AddToken(TokenType tokenType, char[]? literal)
     {
         var text = source.AsSpan().Slice(startIndex, currentIndex - startIndex).ToString();
         tokens.Add(new Token(tokenType, text, literal, lineNumber));

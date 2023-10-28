@@ -22,9 +22,9 @@ public class Program
     private static int PrintAst()
     {
         Expr expr = new BinaryExpr(
-            new UnaryExpr(new Token(TokenType.MINUS, "-", "-", 1), new LiteralExpr(TokenType.NUMBER, 123)),
-            new Token(TokenType.STAR, "*", "*", 1),
-            new GroupingExpr(new LiteralExpr(TokenType.NUMBER, 45.67))
+            new UnaryExpr(new Token(TokenType.MINUS, "-", "-".ToCharArray(), 1), new LiteralExpr(TokenType.NUMBER, "45.67".ToCharArray())),
+            new Token(TokenType.STAR, "*", "*".ToCharArray(), 1),
+            new GroupingExpr(new LiteralExpr(TokenType.NUMBER, "45.67".ToCharArray()))
             );
         Console.WriteLine(new AstPrinter().Print(expr));
         return 0;
