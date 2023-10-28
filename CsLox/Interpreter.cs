@@ -62,12 +62,20 @@ namespace CsLox
                     {
                         return left.ToString() + new string(rcaa);
                     }
+                    else if (left is string @lcaas)
+                    {
+                        return @lcaas + right.ToString();
+                    }
+                    else if (right is string @rcaas)
+                    {
+                        return left.ToString() + @rcaas;
+                    }
                     else
                     {
                         throw new CsLoxRuntimeError(token, $"+ is only supported between numbers or strings or string on one side, left={left}, right={right}");
                     }
                 case TokenType.BANG_EQUAL: return !IsEqual(left, right);
-                case TokenType.EQUAL: return IsEqual(left, right);
+                case TokenType.EQUAL_EQUAL: return IsEqual(left, right);
             }
             throw new CsLoxRuntimeError(token, $"Token {token} is not supported in {methodName}");
         }
@@ -125,6 +133,12 @@ namespace CsLox
             if (left == null)
             {
                 return false;
+            }
+            var leftIsParsed = double.TryParse(left.ToString(), out double l);
+            var rightIsParsed = double.TryParse(right.ToString(), out double r);
+            if (leftIsParsed && rightIsParsed)
+            {
+                return l == r;
             }
             return left.Equals(right);
         }
