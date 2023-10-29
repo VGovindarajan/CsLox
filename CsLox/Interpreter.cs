@@ -140,6 +140,10 @@ namespace CsLox
             {
                 return l == r;
             }
+            else if (left is char[] @lca && right is char[] @rca)
+            {
+                return Enumerable.SequenceEqual(lca, rca);
+            }
             return left.Equals(right);
         }
 
