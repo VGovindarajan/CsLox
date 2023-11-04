@@ -49,7 +49,7 @@ namespace CsLox
         private Expr Comparison()
         {
             Expr expr = Term();
-            while (Match(TokenType.GREATER, TokenType.GREATER, TokenType.LESS, TokenType.LESS_EQUAL))
+            while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
             {
                 Token op = Previous();
                 Expr right = Term();
