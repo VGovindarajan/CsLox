@@ -2,7 +2,7 @@
 
 namespace CsLox
 {
-    public class AstPrinter : IVisitor<string>
+    public class AstPrinter : IExprVisitor<string>
     {
         public string Print(Expr expr)
         {
@@ -63,6 +63,11 @@ namespace CsLox
                 return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty, right);
             }
             return Parenthesize(unaryExpr?.Token?.Lexeme ?? string.Empty);
+        }
+
+        public string VisitVariableExpr(VariableExpr variableExpr)
+        {
+            return $"{variableExpr.Name.Lexeme}";
         }
     }
 }

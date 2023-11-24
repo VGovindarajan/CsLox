@@ -1,10 +1,10 @@
 ﻿namespace CsLox
 {
     public abstract record Expr() {
-        public abstract T Accept<T>(IVisitor<T> visitor);
+        public abstract T Accept<T>(IExprVisitor<T> visitor);
     };
     public record BinaryExpr(Expr Left, Token Operator, Expr Right) : Expr() { 
-        public override T Accept<T>(IVisitor<T> visitor)
+        public override T Accept<T>(IExprVisitor<T> visitor)
         {
             return visitor.VisitBinaryExpr(this);
         }
@@ -33,22 +33,30 @@
             }
         }
 
-        public override T Accept<T>(IVisitor<T> visitor)
+        public override T Accept<T>(IExprVisitor<T> visitor)
         {
             return visitor.VisitUnaryExpr(this);
         }
     };
     public record GroupingExpr(Expr Expression) : Expr {
 
-        public override T Accept<T>(IVisitor<T> visitor)
+        public override T Accept<T>(IExprVisitor<T> visitor)
         {
             return visitor.VisitGroupingExpr(this);
         }
     };
     public record LiteralExpr(TokenType TokenType, object Value) : Expr{
-        public override T Accept<T>(IVisitor<T> visitor)
+        public override T Accept<T>(IExprVisitor<T> visitor)
         {
             return visitor.VisitLiteralExpr(this);
+        }
+    }
+
+    public record VariableExpr(Token Name) : Expr
+    {
+        public override T Accept<T>(IExprVisitor<T> visitor)
+        {
+            return visitor.VisitVariableExpr(this);
         }
     }
     public record OperatorRepr()

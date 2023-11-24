@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsLox
 {
-    public class Interpreter : IVisitor<object>
+    public class Interpreter : IExprVisitor<object>
     {
         public void Interpret(Expr expr)
         {
@@ -113,6 +113,11 @@ namespace CsLox
             return result;
         }
 
+        public object VisitVariableExpr(VariableExpr variableExpr)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool IsTruthy(object result)
         {
             if (result == null) { 
@@ -177,5 +182,7 @@ namespace CsLox
             }
             return obj.ToString() ?? string.Empty;
         }
+
+
     }
 }
