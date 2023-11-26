@@ -16,11 +16,16 @@ namespace CsLox
             this.tokens = tokens;
         }
 
-        public Expr Parse()
+        public List<Stmt> Parse()
         {
+            List<Stmt> statements = new();
             try
             {
-                return Expression();
+                while(!IsAtEnd())
+                {
+                    statements.Add(Statement());
+                }
+                return statements;
 
             }catch (CsLoxParseException pe) {
                 Console.WriteLine($"{pe.Message}");
@@ -210,6 +215,30 @@ namespace CsLox
                 }
                 Advance();
             }
+        }
+
+        private Stmt Statement()
+        {
+            if(Match(TokenType.PRINT))
+            {
+                return PrintStatement();
+            }
+
+            return ExpressionStatement();
+        }
+
+        private Stmt PrintStatement()
+        {
+            Expr value = Expression();
+            Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+            return new PrintStmt(value);
+        }
+
+        private Stmt ExpressionStatement()
+        {
+            Expr value = Expression();
+            Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+            return new ExpressionStmt(value);
         }
     }
 }
